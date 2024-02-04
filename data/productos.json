@@ -1,0 +1,51 @@
+[
+    {
+        "id": 1, 
+        "nombre": "Cerveza Rubia Heineken", 
+        "precio": 899.99, 
+        "imagenURL": "https://hiperlibertad.vteximg.com.br/arquivos/ids/158639-1000-1000/Cerveza-rubia-Heineken-710-Cc-C-HEINEKEN-LATA-710-CC-1-1561.jpg?v=637236252247400000"
+    },
+    {
+        "id": 2,
+        "nombre": "Cerveza Rubia Corona", 
+        "precio": 799.99, 
+        "imagenURL": "https://d2izjnmtylvtfh.cloudfront.net/21873937-thickbox_default/cerveza-corona-rubia-269ml.jpg"
+    },
+
+    {
+        "id": 3,
+        "nombre": "Vodka Smirnoff", 
+        "precio": 1499.99, 
+        "imagenURL": "https://d2r9epyceweg5n.cloudfront.net/stores/001/590/373/products/d_smirf1-aef2a6579975a035e916227587677140-1024-1024.jpg"
+    },
+    {
+        "id": 4,
+        "nombre": "Vodka Sky", 
+        "precio": 1199.99, 
+        "imagenURL": "https://www.rossofinefood.com/2378-large_default/skyy-vodka-1-l.jpg"
+    },
+    {
+        "id": 5,
+        "nombre": "Gancia Americano", 
+        "precio": 799.99, 
+        "imagenURL": "https://gobar.vtexassets.com/arquivos/ids/156378/GANICA.jpg?v=636716737494030000"
+    },
+    {
+        "id": 6,
+        "nombre": "Campari Aperitivo", 
+        "precio": 1899.99, 
+        "imagenURL": "https://d3ugyf2ht6aenh.cloudfront.net/stores/835/701/products/campari-aperitivo-750ml1-7cafead7a1f8a2358516661026421170-640-0.jpg"
+    },
+    {
+        "id": 7,
+        "nombre": "Champagne Chandon E.B", 
+        "precio": 3399.99, 
+        "imagenURL": "https://d2r9epyceweg5n.cloudfront.net/stores/001/069/568/products/champagne-chandon-extra-brut1-106a185e816b840ddb16215179739972-640-0.jpg"
+    },
+    {
+        "id": 8,
+        "nombre": "Whisky Jack Daniels", 
+        "precio": 15999.99, 
+        "imagenURL": "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/384/985/products/whisky-jack-daniels-750-ml1-d9b2e5ecffb25327dd16203179065708-1024-1024.webp"
+    }
+]

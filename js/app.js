@@ -5,13 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let nombreGuardado = localStorage.getItem("nombre");
     let edadGuardada = localStorage.getItem("edad");
-
-    if (
-        nombreGuardado &&
+    if (nombreGuardado &&
         edadGuardada &&
         verificarEdad(edadGuardada) &&
-        nombreGuardado.length >= 3
-    ) {
+        nombreGuardado.length >= 3) {
         overlay.style.display = "none";
     } else {
         overlay.style.display = "flex";
@@ -45,27 +42,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     let carrito = [];
+    let productos = [];
 
-    class Producto {
-        constructor(id, nombre, precio, imagenURL) {
-            this.id = id;
-            this.nombre = nombre;
-            this.precio = precio;
-            this.imagenURL = imagenURL;
-        }
+    function obtenerProductos() {
+        fetch('./data/productos.json') 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener los productos');
+                }
+                return response.json();
+            })
+            .then(data => {
+                productos = data; 
+                renderProductos(productos);
+            })            
+            .catch(error => {
+                console.error('Error al obtener los productos:', error);
+            });
     }
-
-    const productos = [
-        new Producto(1, 'Cerveza Rubia Heineken', 899.99, "https://hiperlibertad.vteximg.com.br/arquivos/ids/158639-1000-1000/Cerveza-rubia-Heineken-710-Cc-C-HEINEKEN-LATA-710-CC-1-1561.jpg?v=637236252247400000"),
-        new Producto(2, 'Cerveza Rubia Corona', 799.99, 'https://d2izjnmtylvtfh.cloudfront.net/21873937-thickbox_default/cerveza-corona-rubia-269ml.jpg'),
-        new Producto(3, 'Vodka Smirnoff', 1499.99, 'https://d2r9epyceweg5n.cloudfront.net/stores/001/590/373/products/d_smirf1-aef2a6579975a035e916227587677140-1024-1024.jpg'),
-        new Producto(4, 'Vodka Sky', 1199.99, 'https://www.rossofinefood.com/2378-large_default/skyy-vodka-1-l.jpg'),
-        new Producto(5, 'Gancia Americano', 799.99, 'https://gobar.vtexassets.com/arquivos/ids/156378/GANICA.jpg?v=636716737494030000'),
-        new Producto(6, 'Campari Aperitivo', 1899.99, 'https://d3ugyf2ht6aenh.cloudfront.net/stores/835/701/products/campari-aperitivo-750ml1-7cafead7a1f8a2358516661026421170-640-0.jpg'),
-        new Producto(7, 'Champagne Chandon E.B', 3399.99, 'https://d2r9epyceweg5n.cloudfront.net/stores/001/069/568/products/champagne-chandon-extra-brut1-106a185e816b840ddb16215179739972-640-0.jpg'),
-        new Producto(8, 'Whisky Jack Daniels', 15999.99, 'https://d3ugyf2ht6aenh.cloudfront.net/stores/001/384/985/products/whisky-jack-daniels-750-ml1-d9b2e5ecffb25327dd16203179065708-1024-1024.webp'),
-    ];
-
+    
     function ordenarPorPrecio(orden) {
         if (orden === "precio-ascendente") {
             return productos.slice().sort((a, b) => a.precio - b.precio);
@@ -77,11 +72,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function verificarEdad(edad) {
+        return edad >= 18;
+    }
+
     document.getElementById("filtro").addEventListener("change", function () {
         const orden = this.value;
         const productosOrdenados = ordenarPorPrecio(orden);
         renderProductos(productosOrdenados);
     });
+
+    function getCantidadEnCarrito(producto) {
+        const productoEnCarrito = carrito.find((p) => p.id === producto.id);
+        return productoEnCarrito ? productoEnCarrito.cantidad : 1;
+    }
 
     function renderProductos(productos) {
         const productContainer = document.getElementById('product-container');
@@ -130,15 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
-    }
-    
-    function getCantidadEnCarrito(producto) {
-        const productoEnCarrito = carrito.find((p) => p.id === producto.id);
-        return productoEnCarrito ? productoEnCarrito.cantidad : 1;
-    }
-
-    function verificarEdad(edad) {
-        return edad >= 18;
     }
 
     function mostrarCarrito() {
@@ -218,13 +213,11 @@ document.addEventListener("DOMContentLoaded", function () {
             mostrarCarrito();
         }
     }
-    
 
     function sincronizarCarrito() {
         localStorage.setItem('carrito', JSON.stringify(carrito));
     }
-    
-    
+
     function mostrarDialogoCantidad(producto) {
         Swal.fire({
             title: `Eliminar ${producto.nombre}`,
@@ -243,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (result.isConfirmed) {
                 const cantidad = parseInt(result.value);
                 eliminarProductoDelCarrito(producto, cantidad);
-    
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Producto eliminado',
@@ -255,21 +248,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-function agruparProductosPorId(carrito) {
-    const productosAgrupados = [];
+    function agruparProductosPorId(carrito) {
+        const productosAgrupados = [];
 
-    carrito.forEach((producto) => {
-        const index = productosAgrupados.findIndex((p) => p.id === producto.id);
-        if (index === -1) {
-            productosAgrupados.push({ ...producto, cantidad: producto.cantidad });
-        } else {
-            productosAgrupados[index].cantidad += producto.cantidad;
-        }
-    });
+        carrito.forEach((producto) => {
+            const index = productosAgrupados.findIndex((p) => p.id === producto.id);
+            if (index === -1) {
+                productosAgrupados.push({ ...producto, cantidad: producto.cantidad });
+            } else {
+                productosAgrupados[index].cantidad += producto.cantidad;
+            }
+        });
 
-    return productosAgrupados.filter((producto) => producto.cantidad > 0);
-}
-    
+        return productosAgrupados.filter((producto) => producto.cantidad > 0);
+    }
+
     mostrarCarrito();
-    renderProductos(productos);
+    obtenerProductos();
 });
